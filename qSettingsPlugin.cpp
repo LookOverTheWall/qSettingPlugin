@@ -1,18 +1,10 @@
 #include "qSettingsPlugin.h"
 
-extern const QString defaultPath = QApplication::applicationDirPath();
+extern const QString defaultSettingFileName = "default.ini";
 
 qSettingsPlugin::qSettingsPlugin()
-    : m_path(new QString(defaultPath))
-    , m_setting(new QSettings(*m_path))
-{
-
-}
-
-qSettingsPlugin::qSettingsPlugin(const QString &path)
-    : m_path(new QString(path))
-    , m_dir(new QDir(*m_path))
-    , m_setting(new QSettings(*m_path))
+    : m_path(new QString(defaultSettingFileName))
+    , m_setting(new QSettings(*m_path, QSettings::IniFormat))
 {
 
 }
@@ -22,32 +14,18 @@ qSettingsPlugin::~qSettingsPlugin()
 
 }
 
-bool qSettingsPlugin::mf_checkPath()
-{
-    if ( m_path->isEmpty() )
-        return false;
-    if ( !m_dir->exists() )
-        return false;
-    return true;
-}
-
-QString qSettingsPlugin::mf_changePath()
-{
-    if ( mf_checkPath() )
-        return *m_path;
-    else
-        return QDir::toNativeSeparators(*m_path);
-}
-
-
-
 void qSettingsPlugin::saveData(const QString &className, const QString &name, const QString &data)
 {
-
+    m_setting->setValue(className + "/" + name, data);
 }
 
 void qSettingsPlugin::getData(const QString &className, const QString &name, QString &data)
 {
+    data = m_setting->value(className + "/" + name).toString();
+}
 
+void qSettingsPlugin::getData(const QString &className, const QString &name, int &data)
+{
+    data = m_setting->value(className + "/" + name).toInt();
 }
 

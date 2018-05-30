@@ -1,8 +1,10 @@
 #ifndef WIDGETSETTINGTEST_H
 #define WIDGETSETTINGTEST_H
 
+#include <QCoreApplication>
 #include <QWidget>
 #include "qSettingsPlugin.h"
+
 
 namespace Ui {
 class widgetSettingTest;
@@ -18,6 +20,10 @@ public:
 
 private:
     Ui::widgetSettingTest *ui;
+
+    const QString settingFileName = "data.ini";
+    const QString path = settingFileName;//QCoreApplication::applicationDirPath() + "/" + settingFileName;
+    qSettingsPlugin *m_setting;
 };
 
 #endif // WIDGETSETTINGTEST_H
